@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.tje.mapper.BoardMapper">
+  <select id="getTotalCount" resultType="int">
+ select count(*) from TBL_BOARD where bno>0
+ </select>
+ 
+ <select id="boardCount" resultType="int">
+ select count(*) from TBL_BOARD
+ </select>
+ 
+ <select id="getList" resultType="com.tje.domain.BoardVO">
+ <![CDATA[
+ SELECT * FROM TBL_BOARD WHERE BNO>0
+ ]]>
+ </select>
+ 
+ <!-- insert만 처리되고 생성된 PK값을 알 필ㄹ요가 없는 경우-->
+ <insert id="insert">
+insert into tbl_board(bno, title, content, username)
+values(seq_board.nextval, #{title}, #{content}, #{username}) 
+ </insert>
+ 
+ <!-- insert문이 실행되고 생성된 PK값을 알아야 하는 경우 -->
+ <insert id="insertSelectKey">
+ 
+ <selectKey keyProperty="bno" order="BEFORE" resultType="long">
+ select seq_board.nextval from dual
+ </selectKey>
+insert into tbl_board(bno, title, content, username)
+values(#{bno}, #{title}, #{content}, #{username}) 
+ </insert>
+ 
+ 
+ <select id="read" resultType="com.tje.domain.BoardVO">
+ select * from tbl_board where bno = #{bno}
+ </select>
+ 
+ <!-- 정상적으로 데이터를 삭제하면 1을 반환,  만약 삭제할 게시물 번호가 없다면 0을 반환한다.  -->
+ <delete id="delete">
+ delete tbl_board where bno = #{bno}
+ </delete>
+ 
+ <update id="update">
+ update tbl_board
+ set title=#{title},
+ content = #{content},
+ username = #{username},
+ updateDate = sysdate
+ where  bno=#{bno}
+ </update>
+ 
+ <select id="getListWithPaging" resultType="com.tje.domain.BoardVO">
+ <![CDATA[
+ select bno, title, content, username, regdate, updatedate from(
+ select  /*+INDEX_DESC(tbl_board pkt_board) */
+ rownum rn, bno, title, content, username, regdate, updatedate from tbl_board where rownum <= #{pageNum} * #{amount})
+ where rn > (#{pageNum}-1) * #{amount}
+ ]]>
+ 
+ </select>
+ 
+ 
+ </mapper>

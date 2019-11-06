@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tje.mapper.NonmemberMapper">
+
+	<select id="getSearchKeywordList" resultType="com.tje.domain.NonmemberVO">
+
+		SELECT * FROM nonmember_table WHERE search_word IS NOT NULL
+
+	</select>
+
+	<insert id="insertSearchKeyword">
+
+		INSERT INTO nonmember_table(search_num, search_word)
+		VALUES(nonmember_table_search_num_seq.NEXTVAL, #{search_word})
+
+	</insert>
+
+</mapper>
+

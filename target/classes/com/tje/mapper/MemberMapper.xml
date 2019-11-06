@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tje.mapper.MemberMapper">
+
+	<select id="idDoubleCheck" resultType="int">
+		SELECT COUNT(*) FROM
+		MEMBER_TABLE
+		WHERE username = #{username}
+	</select>
+
+	<select id="loginCheck" resultType="integer">
+		SELECT count(*) FROM MEMBER_TABLE
+		WHERE (USERNAME = #{username} AND USERPASSWORD = #{userpassword})
+	</select>
+
+	<insert id="insertMember"
+		parameterType="com.tje.domain.MemberVO">
+		INSERT INTO MEMBER_TABLE(USERBNO, USERNAME, USERBIRTH,
+		USERGENDER,
+		USEREMAIL, USERPASSWORD)
+		VALUES(MEMSEQ_TBL.NEXTVAL,
+		#{username}, #{userbirth}, #{usergender}, #{useremail},
+		#{userpassword})
+	</insert>
+
+	<!-- parameterType : 구문에 전달될 파라미터의 패키지 경로를 포함한 전체 클래스명이나 별칭 -->
+	<!-- resultType : 이 구문에 의해 리턴되는 기대타입의 패키지 경로를 포함한 전체 클래스명이나 별칭. -->
+	<insert id="insertCart"
+		parameterType="com.tje.domain.InsertDiaryVO">
+		INSERT INTO LIST_TABLE(LISTNUM, CONTENTTYPEID,
+		FIRSTIMAGE,
+		TITLE, CONTENTID, USERNAME) VALUES(LISTSEQ_TABLE.NEXTVAL,
+		#{contenttypeid},
+		#{firstimage}, #{title}, #{contentid}, #{username})
+	</insert>
+	
+	 <select id="list" resultType="com.tje.domain.TravelList">
+ select FIRSTIMAGE, TITLE from LIST_TABLE where USERNAME = #{username}
+ </select>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tje.mapper.AdminMapper">
+	<select id="loginCheck" resultType="integer">
+		SELECT count(*) FROM
+		ADMIN_TABLE
+		WHERE (ADMINNAME = #{adminname} AND ADMINPASSWORD =
+		#{adminpassword})
+	</select>
+	<select id="getList" resultType="com.tje.domain.MemberVO">
+		select USERNAME, USERBIRTH, USERGENDER, USEREMAIL, REGDATE from
+		MEMBER_TABLE
+	</select>
+</mapper>
